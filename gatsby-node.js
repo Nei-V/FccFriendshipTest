@@ -7,7 +7,7 @@
 // You can delete this file if you're not using it
 
 
-var webpack = require('webpack');
+const webpack = require('webpack');
 
 exports.onCreateWebpackConfig = ({ actions, plugins }) => {
     actions.setWebpackConfig({
