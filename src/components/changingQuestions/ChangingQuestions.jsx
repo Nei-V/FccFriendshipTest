@@ -140,6 +140,7 @@ function QuestionCard(props) {
 
 function GameOver(props) {
     console.log("props in game over", props);
+    
     if (props.gameOver) {
         if (props.gameWon) {
             let friendA = Object.values(props.answersPl1);
@@ -268,8 +269,9 @@ class ChangingQuestions extends React.Component {
     }
   
     render() {
+        
         return (
-            <div>
+                 <div>
                 <LandingPage
                     render={this.state.isLandingPage}
                     createGameHandler={this.createGame}
@@ -285,8 +287,9 @@ class ChangingQuestions extends React.Component {
                     submitAnswerHandler={this.submitAnswer}
                    />
                 <div>
-                    {this.state.loading ? <div>getting data</div> : <GameOver gameOver={this.state.gameOver} gameWon={this.state.gameWon} id={this.state.gameRef} answersPl1={this.state.answersPl1} answersPl2={this.state.answersPl2} />}
-                </div>
+                    
+                   {this.state.loading ? <div>getting data</div> : <GameOver gameOver={this.state.gameOver} gameWon={this.state.gameWon} id={this.state.gameRef} answersPl1={this.state.answersPl1} answersPl2={this.state.answersPl2} />}
+             </div>
             </div>
         );//the gameover components shoud receive props from the state.
     }
