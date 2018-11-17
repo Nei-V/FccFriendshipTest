@@ -6,3 +6,5 @@ A simple game of words between two people. The goal of the game is to respond wi
 
 ### The friendly questionnaire
 How alike are you and your friend? Answer questions and get a score if both have given the same answers!
+
+## This is a project madde at the JAMstack Freecodecamp Hackaton 2018. This forked project has minor improvements and typos corrections over the original one that was submited to the contest - all in the "The friendly questionnaire" minigame. The overall design of the site and the "WordGame" were done by other team members. "The friendly questionnaire"" minigame was done by me (of course, with help from other team members). 
