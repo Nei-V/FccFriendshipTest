@@ -15,7 +15,7 @@ import { FAUNA_SECRET } from '../../constants';
 
 let client = {};
 
-const questionList = [["What is your name?", "FriendA"], ["Send the challenge to a friend(email)?", "testmail@nonexistant.com"], ["Question 1: Do you like reading books?", ["yes", "no", "maybe"]], ["Question 2: What is your age?", 100], ["Question 3: Do you like dogs?", ["yes", "no"]], ["Question 4: How much do you like to study?", ["very much", "a lot", "so and so", "not at all"]]];
+const questionList = [['What is your name?', 'FriendA'], ['Send the challenge to a friend(email)?', 'testmail@nonexistant.com'], ['Question 1: Do you like reading books?', ['yes', 'no', 'maybe']], ['Question 2: What is your age?', 100], ['Question 3: Do you like dogs?', ['yes', 'no']], ['Question 4: How much do you like to study?', ['very much', 'a lot', 'so and so', 'not at all']]];
 
 const buttonStyle = {
     marginLeft: '100px',
@@ -25,15 +25,14 @@ const containerStyle = {
     padding: '10px',
     textAlign: 'center',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
 };
 
 const elementStyle = {
     marginLeft: 'auto',
     marginRight: 'auto',
-    paddingBottom: '16px'
+    paddingBottom: '16px',
 };
-
 
 
 function LandingPage(props) {
@@ -64,13 +63,13 @@ function LandingPage(props) {
                 </Grid>
             </div>
         );
-    } else {
-        return null;
     }
+    return null;
+
 }
 
 function QuestionCard(props) {
-    console.log("props in question card",props);
+    console.log("props in question card", props);
     let question = questionList[props.questionNumber][0];
     let answer = questionList[props.questionNumber][1];
     if ((props.isQuestion) && (!Array.isArray(answer))) {
@@ -98,14 +97,14 @@ function QuestionCard(props) {
                 </Grid>
             </Paper>
         );
-    } else if ((props.isQuestion) && (Array.isArray(answer))) {
+    } if ((props.isQuestion) && (Array.isArray(answer))) {
         return (
             <Paper>
                 <Grid container>
                     <span>{question}</span>
                 </Grid>
                 <Grid container>
-                    <form  autoComplete="on">
+                    <form autoComplete="on">
 
                         <FormControl required >
 
@@ -140,7 +139,7 @@ function QuestionCard(props) {
 
 function GameOver(props) {
     console.log("props in game over", props);
-    
+
     if (props.gameOver) {
         if (props.gameWon) {
             let friendA = Object.values(props.answersPl1);
@@ -165,15 +164,16 @@ function GameOver(props) {
                 <p>Email this id to your friend:  {props.id} </p>
             );
         }
-    } else {
-        return null;
     }
+    return null;
+
 }
 class ChangingQuestions extends React.Component {
-
     constructor(props) {
         super(props);
-        this.state = { loading: false, isLandingPage: true, questionsList: questionList, gameStarted: false, questionNumber: 0, responseWord: "", gameOver: false, gameWon: false, gameRef: 0, answersPl1: {}, answersPl2: {} };
+        this.state = {
+            loading: false, isLandingPage: true, questionsList: questionList, gameStarted: false, questionNumber: 0, responseWord: '', gameOver: false, gameWon: false, gameRef: 0, answersPl1: {}, answersPl2: {}
+        };
         this.createGame = this.createGame.bind(this);
         this.joinGame = this.joinGame.bind(this);
         this.joinGameRefInputHandler = this.joinGameRefInputHandler.bind(this);
@@ -189,7 +189,7 @@ class ChangingQuestions extends React.Component {
 
     joinGameRefInputHandler(e) {
         e.preventDefault();
-        this.setState({ gameRef: e.target.value })
+        this.setState({ gameRef: e.target.value });
     }
 
     responseTextHandler(e) {
@@ -198,20 +198,20 @@ class ChangingQuestions extends React.Component {
     }
 
     endGame() {
-        console.log("Ending Game");
+        console.log('Ending Game');
         this.addFriend();
         this.setState({ currentTurn: false, gameOver: true, isQuestion: false });
     }
 
     submitAnswer(e) {
-        console.log("Submiting answer and changing question");
-        console.log("props in submit answer", this.props, " and state in submit answer", this.state);
-        console.log("answersList in submitAnswer", this.answersList);
-        this["answersList"][`answer${this.state.questionNumber}`] = this.state.responseWord;
-        console.log("answersList in submitAnswer with new answer", this.answersList);
-        this.setState({ responseWord: "" });
-        console.log("state in submit answer",this.state);
-        if (this.state.questionNumber == this.state.questionsList.length - 1) {
+        console.log('Submiting answer and changing question');
+        console.log('props in submit answer', this.props, ' and state in submit answer', this.state);
+        console.log('answersList in submitAnswer', this.answersList);
+        this.answersList[`answer${this.state.questionNumber}`] = this.state.responseWord;
+        console.log('answersList in submitAnswer with new answer', this.answersList);
+        this.setState({ responseWord: '' });
+        console.log('state in submit answer', this.state);
+        if (this.state.questionNumber === this.state.questionsList.length - 1) {
             this.endGame();
         } else {
             this.setState({ questionNumber: this.state.questionNumber + 1 });
@@ -220,32 +220,34 @@ class ChangingQuestions extends React.Component {
 
     createGame(e) {
         e.preventDefault();
-        console.log("Creating game");
+        console.log('Creating game');
         this.setState({ gameRef: 0, isLandingPage: false, isQuestion: true });
     }
 
     joinGame(e) {
         e.preventDefault();
-        console.log("Joining game " + this.state.gameRef);
+        console.log('Joining game ' + this.state.gameRef);
 
         this.setState({ loading: true });
         this.client.query(q.Get(q.Ref(
-            q.Class("friends"), this.state.gameRef))).then((refObject) => {
-                console.log(refObject);
-                if (refObject.ref.value.id === this.state.gameRef) {
-                    console.log("good game ID", this.state.gameRef);
-                    let id = this.state.gameRef.toString();
-                    console.log("ID", id);
-                    this.answersA = refObject.data;
-                    console.log("first player's answer the second one plays", this.answersA);
-                    this.setState({ loading: false, answersPl2: this.answersA, gameWon: true, gameStarted: false, isLandingPage: true, isQuestion: false });
-                    this.createGame(e);
-                }
-            })
+            q.Class('friends'), this.state.gameRef
+        ))).then((refObject) => {
+            console.log(refObject);
+            if (refObject.ref.value.id === this.state.gameRef) {
+                console.log('good game ID', this.state.gameRef);
+                const id = this.state.gameRef.toString();
+                console.log('ID', id);
+                this.answersA = refObject.data;
+                console.log("first player's answer the second one plays", this.answersA);
+                this.setState({
+                    loading: false, answersPl2: this.answersA, gameWon: true, gameStarted: false, isLandingPage: true, isQuestion: false
+                });
+                this.createGame(e);
+            }
+        })
             .then((ret) => {
-                console.log("reply from the database in - then - ",ret);
+                console.log('reply from the database in - then - ', ret);
                 console.log(this.answersA);
-
             });
     }
 
@@ -257,27 +259,29 @@ class ChangingQuestions extends React.Component {
         }
         client.query(
             q.Create(
-                q.Class("friends"),
+                q.Class('friends'),
                 {
-                    data: this.answersList
-                }))
+                    data: this.answersList,
+                }
+            )
+        )
             .then((ret) => {
                 console.log(ret);
                 this.setState({ gameRef: ret.ref.value.id });
-                console.log("game ref at end game", this.state.gameRef);
-            })
+                console.log('game ref at end game', this.state.gameRef);
+            });
     }
-  
+
     render() {
-        
         return (
-                 <div>
+            <div>
                 <LandingPage
                     render={this.state.isLandingPage}
                     createGameHandler={this.createGame}
                     joinGameHandler={this.joinGame}
-                    joinText={this.joinGameRefInputHandler} />
-                 <QuestionCard
+                    joinText={this.joinGameRefInputHandler}
+                />
+                <QuestionCard
                     isQuestion={this.state.isQuestion}
                     questionNumber={this.state.questionNumber}
                     isTurn={this.state.currentTurn}//
@@ -285,13 +289,13 @@ class ChangingQuestions extends React.Component {
                     word={this.state.responseWord}//
                     textChange={this.responseTextHandler}
                     submitAnswerHandler={this.submitAnswer}
-                   />
+                />
                 <div>
-                    
-                   {this.state.loading ? <div>getting data</div> : <GameOver gameOver={this.state.gameOver} gameWon={this.state.gameWon} id={this.state.gameRef} answersPl1={this.state.answersPl1} answersPl2={this.state.answersPl2} />}
-             </div>
+
+                    {this.state.loading ? <div>getting data</div> : <GameOver gameOver={this.state.gameOver} gameWon={this.state.gameWon} id={this.state.gameRef} answersPl1={this.state.answersPl1} answersPl2={this.state.answersPl2} />}
+                </div>
             </div>
-        );//the gameover components shoud receive props from the state.
+        );// the gameover components shoud receive props from the state.
     }
 }
 
